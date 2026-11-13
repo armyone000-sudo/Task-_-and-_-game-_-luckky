@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#101b35">
+<title>TASK AND GAME LUCKKY</title>
+<style>
+:root{--navy:#101b35;--blue:#1d4ed8;--gold:#f5c451;--bg:#f3f6fb;--ink:#172033;--muted:#68758b;--white:#fff;--green:#12805c;--red:#c43d4b}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Arial,Helvetica,sans-serif}button,input,select{font:inherit}button{cursor:pointer;border:0;border-radius:12px;padding:12px 16px;font-weight:700}.hidden{display:none!important}.top{background:linear-gradient(135deg,#101b35,#203e78);color:white;padding:22px 18px 28px;border-radius:0 0 24px 24px}.brand{font-weight:900;font-size:21px;letter-spacing:.4px}.brand span{color:var(--gold)}.topline{display:flex;justify-content:space-between;align-items:center;gap:12px}.lang{background:#ffffff20;color:white;border:1px solid #ffffff55;padding:8px 10px}.welcome{margin-top:24px}.welcome small{color:#d4def4}.welcome h1{font-size:25px;margin:7px 0}.wrap{max-width:760px;margin:auto;padding:0 14px 90px}.balance{background:white;border-radius:18px;padding:18px;margin-top:-16px;position:relative;box-shadow:0 8px 25px #17203312}.balance small,.muted{color:var(--muted)}.amount{font-size:31px;font-weight:900;margin:7px 0 14px}.row{display:flex;gap:10px;flex-wrap:wrap}.row>*{flex:1}.primary{background:var(--blue);color:white}.gold{background:var(--gold);color:#2b2516}.light{background:#eaf0ff;color:#1c3e8a}.danger{background:#fff0f1;color:var(--red)}.section{margin-top:22px}.section h2{font-size:18px;margin:0 0 12px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.card{background:white;padding:16px;border-radius:16px;box-shadow:0 4px 15px #17203308}.card strong{display:block;font-size:16px;margin:7px 0}.icon{font-size:23px}.card p{font-size:13px;color:var(--muted);line-height:1.45;margin:5px 0 12px}.task{display:flex;justify-content:space-between;gap:10px;align-items:center}.task button{white-space:nowrap}.panel{background:white;border-radius:16px;padding:18px;margin-top:16px}.field{margin:12px 0}.field label{display:block;font-size:13px;font-weight:700;margin-bottom:6px}.field input,.field select{width:100%;padding:13px;border:1px solid #d8dfeb;border-radius:10px;background:#fff}.note{background:#fff8e6;color:#755315;padding:12px;border-radius:11px;font-size:13px;line-height:1.5}.tabs{position:fixed;bottom:0;left:0;right:0;background:white;box-shadow:0 -4px 20px #17203312;display:flex;justify-content:center;gap:4px;padding:9px 5px calc(9px + env(safe-area-inset-bottom));z-index:5}.tabs button{background:transparent;color:#68758b;padding:8px 10px;font-size:11px;flex:1;max-width:130px}.tabs button.active{color:var(--blue);background:#edf2ff}.tabicon{display:block;font-size:19px;margin-bottom:3px}.status{font-size:12px;padding:5px 8px;border-radius:20px;background:#e8f7f0;color:var(--green)}.history{border-bottom:1px solid #edf0f5;padding:11px 0;font-size:13px}.history:last-child{border:0}.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:#172033;color:white;padding:12px 16px;border-radius:10px;z-index:10;max-width:90%;font-size:13px}.auth{max-width:440px;margin:35px auto;padding:0 16px}.authbox{background:white;padding:22px;border-radius:18px;box-shadow:0 8px 28px #17203312}.auth h1{font-size:24px}.smallbtn{padding:9px 12px;font-size:13px}.footer{text-align:center;color:var(--muted);font-size:11px;margin:22px 0}
+@media(max-width:390px){.grid{grid-template-columns:1fr}.amount{font-size:27px}.top{padding-top:18px}}
+</style>
+</head>
+<body>
+<div id="auth" class="auth">
+ <div class="authbox">
+  <div class="brand" style="color:#101b35">TASK AND GAME <span>LUCKKY</span></div>
+  <h1 id="authTitle">Create your account</h1>
+  <p class="muted" id="authSub">Register to view tasks and your wallet.</p>
+  <div id="registerFields">
+   <div class="field"><label>Full name / Cikakken suna</label><input id="regName" placeholder="Your full name"></div>
+   <div class="field"><label>Phone number / Lambar waya</label><input id="regPhone" inputmode="tel" placeholder="08012345678"></div>
+   <div class="field"><label>Password / Kalmar sirri</label><input id="regPass" type="password" placeholder="At least 6 characters"></div>
+   <div class="field"><label>Referral code (optional)</label><input id="regRef" placeholder="Referral code"></div>
+   <div class="note">Registration fee: ₦3,000. This preview does not collect money. A verified payment gateway and secure server must be connected before real registration payments.</div>
+   <button class="primary" style="width:100%;margin-top:14px" onclick="register()">Create account</button>
+  </div>
+  <div id="loginFields" class="hidden">
+   <div class="field"><label>Phone number</label><input id="loginPhone" inputmode="tel"></div>
+   <div class="field"><label>Password</label><input id="loginPass" type="password"></div>
+   <button class="primary" style="width:100%" onclick="login()">Log in</button>
+  </div>
+  <p style="text-align:center;font-size:13px"><span id="switchText">Already registered?</span> <a href="#" onclick="toggleAuth();return false"> <b id="switchLink">Log in</b></a></p>
+ </div>
+</div>
+<div id="app" class="hidden">
+ <header class="top">
+  <div class="topline"><div class="brand">TASK AND GAME <span>LUCKKY</span></div><button class="lang" onclick="toggleLanguage()">HA / EN</button></div>
+  <div class="welcome"><small id="hello">Welcome back</small><h1 id="userName">Member</h1><small>Earn by completing available tasks</small></div>
+ </header>
+ <main class="wrap">
+  <section id="homePage">
+   <div class="balance">
+    <small id="walletLabel">Available wallet balance</small><div class="amount" id="balance">₦0.00</div>
+    <div class="row"><button class="primary" onclick="showPage('wallet')">Withdraw</button><button class="light" onclick="showPage('tasks')">View tasks</button></div>
+   </div>
+   <div class="section"><h2>Account overview</h2><div class="grid">
+    <div class="card"><span class="icon">🎁</span><strong>₦1,000</strong><p>Welcome bonus (preview credit)</p></div>
+    <div class="card"><span class="icon">✅</span><strong>₦500</strong><p>Reward per daily task</p></div>
+    <div class="card"><span class="icon">💳</span><strong>₦6,500</strong><p>Minimum withdrawal</p></div>
+    <div class="card"><span class="icon">👥</span><strong id="refCount">0</strong><p>People referred</p></div>
+   </div></div>
+   <div class="section"><h2>Latest activity</h2><div class="card" id="recent"><p class="muted">No activity yet.</p></div></div>
+  </section>
+  <section id="tasksPage" class="hidden">
+   <div class="section"><h2>Daily tasks / Ayyukan yau da kullum</h2><div class="note">Complete each task once per day. Rewards shown here are test credits saved only in this browser; they are not cash payments.</div>
+   <div class="panel task"><div><b>📺 Watch a learning video</b><p class="muted">Open the task and mark it complete.</p><b>Reward: ₦500</b></div><button class="primary" onclick="claimTask('video')">Complete</button></div>
+   <div class="panel task"><div><b>🧠 Answer a simple quiz</b><p class="muted">Practice and earn a test reward.</p><b>Reward: ₦500</b></div><button class="primary" onclick="claimTask('quiz')">Complete</button></div>
+   </div>
+  </section>
+  <section id="walletPage" class="hidden">
+   <div class="section"><h2>My wallet / Wallet dina</h2><div class="card"><small class="muted">Test balance</small><div class="amount" id="walletBalance">₦0.00</div><div class="note">Withdrawal requests in this preview are saved locally only. No bank transfer will happen until a secure backend and payment provider are integrated.</div></div>
+   <div class="panel"><h2>Request withdrawal</h2><div class="field"><label>Amount (minimum ₦6,500)</label><input id="withdrawAmount" type="number" min="6500" placeholder="6500"></div><div class="field"><label>Bank name</label><input id="bankName" placeholder="Bank name"></div><div class="field"><label>Account name</label><input id="accountName" placeholder="Account holder name"></div><div class="field"><label>Account number</label><input id="accountNumber" inputmode="numeric" maxlength="10" placeholder="10-digit account number"></div><p class="muted">Preview withdrawal fee: ₦500. No real withdrawal is processed.</p><button class="primary" style="width:100%" onclick="requestWithdrawal()">Submit test request</button></div>
+   </div>
+  </section>
+  <section id="refPage" class="hidden">
+   <div class="section"><h2>Referral / Gayyato abokai</h2><div class="card"><p>Share your referral code with friends.</p><div class="amount" style="font-size:24px" id="refCode">LUCKKY</div><button class="primary" onclick="copyReferral()">Copy referral code</button></div></div>
+  </section>
+  <section id="profilePage" class="hidden">
+   <div class="section"><h2>Profile / Bayanan asusu</h2><div class="card"><p><b>Name:</b> <span id="profileName"></span></p><p><b>Phone:</b> <span id="profilePhone"></span></p><p><b>Account type:</b> Member</p><button class="danger" onclick="logout()">Log out</button></div></div>
+  </section>
+  <div class="footer">TASK AND GAME LUCKKY · Preview version · Secure server required for real payments.</div>
+ </main>
+ <nav class="tabs">
+  <button class="active" data-page="home" onclick="showPage('home')"><span class="tabicon">🏠</span>Home</button>
+  <button data-page="tasks" onclick="showPage('tasks')"><span class="tabicon">📝</span>Tasks</button>
+  <button data-page="wallet" onclick="showPage('wallet')"><span class="tabicon">👛</span>Wallet</button>
+  <button data-page="ref" onclick="showPage('ref')"><span class="tabicon">👥</span>Refer</button>
+  <button data-page="profile" onclick="showPage('profile')"><span class="tabicon">👤</span>Profile</button>
+ </nav>
+</div>
+<div id="toast" class="toast hidden"></div>
+<script>
+const KEY='luckky_preview_v1';
+let db=JSON.parse(localStorage.getItem(KEY)||'{"users":[],"current":null}');
+let lang='en';
+function save(){localStorage.setItem(KEY,JSON.stringify(db))}
+function current(){return db.users.find(u=>u.phone===db.current)}
+function money(n){return '₦'+Number(n||0).toLocaleString('en-NG',{minimumFractionDigits:2,maximumFractionDigits:2})}
+function toast(s){let t=document.getElementById('toast');t.textContent=s;t.classList.remove('hidden');setTimeout(()=>t.classList.add('hidden'),2600)}
+function toggleAuth(){let reg=document.getElementById('registerFields'),login=document.getElementById('loginFields'),isReg=!reg.classList.contains('hidden');reg.classList.toggle('hidden',isReg);login.classList.toggle('hidden',!isReg);document.getElementById('authTitle').textContent=isReg?'Log in':'Create your account';document.getElementById('authSub').textContent=isReg?'Welcome back.':'Register to view tasks and your wallet.';document.getElementById('switchText').textContent=isReg?'New here?':'Already registered?';document.getElementById('switchLink').textContent=isReg?'Create account':'Log in'}
+function register(){let name=document.getElementById('regName').value.trim(),phone=document.getElementById('regPhone').value.trim(),pass=document.getElementById('regPass').value;if(name.length<2||phone.length<10||pass.length<6)return toast('Enter a valid name, phone number and password.');if(db.users.some(u=>u.phone===phone))return toast('This phone number is already registered.');let u={name,phone,pass,balance:1000,created:Date.now(),claimed:{},history:[{text:'Welcome bonus (preview credit)',amount:1000,date:new Date().toLocaleString()}],ref:'LK'+phone.slice(-4)+Math.random().toString(36).slice(2,5).toUpperCase(),withdrawals:[]};db.users.push(u);db.current=phone;save();launch()}
+function login(){let phone=document.getElementById('loginPhone').value.trim(),pass=document.getElementById('loginPass').value,u=db.users.find(x=>x.phone===phone&&x.pass===pass);if(!u)return toast('Incorrect phone number or password.');db.current=phone;save();launch()}
+function launch(){document.getElementById('auth').classList.add('hidden');document.getElementById('app').classList.remove('hidden');render()}
+function render(){let u=current();if(!u){logout();return}document.getElementById('userName').textContent=u.name;document.getElementById('profileName').textContent=u.name;document.getElementById('profilePhone').textContent=u.phone;document.getElementById('balance').textContent=money(u.balance);document.getElementById('walletBalance').textContent=money(u.balance);document.getElementById('refCode').textContent=u.ref;document.getElementById('refCount').textContent='0';let h=u.history.slice(-4).reverse();document.getElementById('recent').innerHTML=h.length?h.map(x=>`<div class="history">${x.text}<span style="float:right;color:${x.amount>=0?'#12805c':'#c43d4b'}">${x.amount>=0?'+':''}${money(x.amount)}</span><br><small class="muted">${x.date}</small></div>`).join(''):'<p class="muted">No activity yet.</p>'}
+function showPage(p){['home','tasks','wallet','ref','profile'].forEach(x=>document.getElementById(x+'Page').classList.toggle('hidden',x!==p));document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('active',b.dataset.page===p));if(p==='wallet')render()}
+function claimTask(id){let u=current(),today=new Date().toISOString().slice(0,10);if(u.claimed[id]===today)return toast('You have already completed this task today.');u.claimed[id]=today;u.balance+=500;u.history.push({text:'Daily task reward (preview)',amount:500,date:new Date().toLocaleString()});save();render();toast('₦500 test reward added to your preview wallet.')}
+function requestWithdrawal(){let u=current(),amount=Number(document.getElementById('withdrawAmount').value),bank=document.getElementById('bankName').value.trim(),name=document.getElementById('accountName').value.trim(),acc=document.getElementById('accountNumber').value.trim();if(!Number.isFinite(amount)||amount<6500)return toast('Minimum withdrawal is ₦6,500.');if(amount+500>u.balance)return toast('Insufficient preview balance (including ₦500 fee).');if(!bank||!name||!/^[0-9]{10}$/.test(acc))return toast('Enter bank, account name and valid 10-digit account number.');u.balance-=amount+500;u.withdrawals.push({amount,fee:500,bank,name,acc,status:'Test request only',date:new Date().toLocaleString()});u.history.push({text:'Test withdrawal request (fee included)',amount:-(amount+500),date:new Date().toLocaleString()});save();render();toast('Test request saved on this device only. No money was sent.');document.getElementById('withdrawAmount').value=''}
+function copyReferral(){let code=current().ref;if(navigator.clipboard?.writeText)navigator.clipboard.writeText(code).then(()=>toast('Referral code copied.')).catch(()=>toast('Your referral code is '+code));else toast('Your referral code is '+code)}
+function logout(){db.current=null;save();document.getElementById('app').classList.add('hidden');document.getElementById('auth').classList.remove('hidden');showAuthDefault()}
+function showAuthDefault(){document.getElementById('registerFields').classList.remove('hidden');document.getElementById('loginFields').classList.add('hidden');document.getElementById('authTitle').textContent='Create your account';document.getElementById('switchText').textContent='Already registered?';document.getElementById('switchLink').textContent='Log in'}
+function toggleLanguage(){lang=lang==='en'?'ha':'en';toast(lang==='ha'?'An kunna zaɓin Hausa (ƙaramin samfuri).':'English selected.')}
+if(db.current&&current())launch();
+</script>
+</body>
+</html>
