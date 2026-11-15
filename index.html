@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ha">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TASK AND GAME LUCKKY - Muhammad Malami</title>
+<style>
+*{box-sizing:border-box;font-family:Arial,sans-serif}
+body{margin:0;background:#0f172a;color:#fff;padding:15px}
+.card{background:#1e293b;padding:16px;border-radius:16px;margin-bottom:15px;border:1px solid #334155}
+h1{color:#facc15;text-align:center;font-size:22px}
+h2{color:#22c55e;font-size:18px}
+input,select,button{width:100%;padding:12px;margin:7px 0;border-radius:10px;border:none;font-size:15px}
+input,select{background:#0f172a;color:#fff;border:1px solid #475569}
+button{background:#facc15;color:#000;font-weight:bold;cursor:pointer}
+button.green{background:#22c55e;color:#fff}
+button.red{background:#ef4444;color:#fff}
+button.gray{background:#475569;color:#fff}
+.pay-box{background:#fef3c7;color:#000;padding:14px;border-radius:12px;text-align:center}
+.pay-box b{font-size:20px}
+.badge{display:inline-block;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:bold}
+.locked{background:#ef4444}.active{background:#22c55e}.pending{background:#f59e0b}
+.small{font-size:13px;color:#cbd5e1}
+.hidden{display:none}
+.admin-item{background:#0f172a;padding:12px;border-radius:10px;margin:8px 0;border:1px solid #475569}
+.flex{display:flex;gap:8px}.flex button{flex:1}
+.top{display:flex;justify-content:space-between;align-items:center}
+</style>
+</head>
+<body>
+
+<div id="authPage">
+  <h1>👑 TASK AND GAME LUCKKY</h1>
+  <p style="text-align:center" class="small">By MUHAMMAD MALAMI | Opay: 9072071470</p>
+  <div class="card">
+    <h2>Register / Login</h2>
+    <input id="regName" placeholder="Cikakken Sunanka">
+    <input id="regPhone" placeholder="Phone Number">
+    <input id="regPass" type="password" placeholder="Saka Password">
+    <input id="refCode" placeholder="Referral Code (Optional) - Misali LK6168IVL">
+    <button onclick="register()">Create Account / Login</button>
+    <p class="small">Idan ka riga ka yi register, saka suna da password dinka zaka shiga.</p>
+  </div>
+  <div class="card">
+    <button class="gray" onclick="showAdminLogin()">🔐 Admin Login (Mai Kamfani Kawai)</button>
+  </div>
+</div>
+
+<div id="adminLogin" class="hidden">
+  <div class="card">
+    <h2>Admin Login</h2>
+    <input id="adminPass" type="password" placeholder="Admin Password">
+    <button onclick="adminLogin()">Shiga Admin Panel</button>
+    <button class="gray" onclick="backHome()">Koma Baya</button>
+    <p class="small">Kai kawai ka san wannan password din.</p>
+  </div>
+</div>
+
+<div id="adminPage" class="hidden">
+  <div class="top"><h1>ADMIN PANEL</h1><button style="width:auto" class="red" onclick="logout()">Logout</button></div>
+  <div class="card"><h2>Mutanen da suka yi Register</h2><div id="adminList"></div></div>
+  <div class="card"><h2>Withdrawals da aka nema</h2><div id="adminWithdraw"></div></div>
+  <div class="card"><p class="small">Total Users: <b id="totalUsers">0</b> | Total Approved: <b id="totalApproved">0</b> | Total Pending Payment: <b id="totalPending">0</b></p></div>
+</div>
+
+<div id="userPage" class="hidden">
+  <div class="top"><div><b id="uName">User</b><br><span class="small" id="uPhone"></span></div><button style="width:auto" class="red" onclick="logout()">Logout</button></div>
+  <div class="card">
+    <div>Balance: <b style="color:#facc15;font-size:22px" id="uBalance">₦0</b></div>
+    <div>Status: <span id="uStatus" class="badge locked">NOT ACTIVATED</span></div>
+    <p class="small">Referral Code dinka: <b id="myRef" style="color:#fff"></b> | Ka samu ₦200 idan wani ya yi register da code dinka</p>
+  </div>
+
+  <div id="paySection" class="card">
+    <h2>Mataki 1: Biya ₦3,000 don kunna Account</h2>
+    <div class="pay-box">
+      Ka tura <b>₦3,000</b><br>
+      Bank: <b>Opay</b><br>
+      Number: <b>9072071470</b><br>
+      Suna: <b>MUHAMMAD MALAMI</b>
+    </div>
+    <p class="small">Bayan ka biya, saka Transaction ID / Receipt Number a kasa, ka danna I Have Paid. Admin zai duba Opay dinsa ya tabbatar.</p>
+    <input id="txnId" placeholder="Saka Transaction ID ko Receipt Number. Misali: 123456789">
+    <button onclick="submitPayment()">I HAVE PAID - ₦3,000</button>
+    <p id="payMsg" class="small"></p>
+  </div>
+
+  <div id="waitSection" class="card hidden">
+    <h2>⏳ Ana Jiran Tabbatarwa</h2>
+    <p>Ka riga ka tura kudi. Admin yana duba Opay dinsa. Idan ya tabbatar, account dinka zai kunna nan take.</p>
+    <p class="small">Txn: <b id="waitTxn"></b></p>
+  </div>
+
+  <div id="taskSection" class="card hidden">
+    <h2>Tasks - Kullum</h2>
+    <p class="small">Yi Task ka samu kudi. Idan ka gama, danna Claim.</p>
+    <button onclick="doTask('Watch Video - ₦200',200)">📹 Kalli Video - Samu ₦200</button>
+    <button onclick="doTask('Follow Page - ₦150',150)">👍 Follow Page - Samu ₦150</button>
+    <button onclick="doTask('Play Game - ₦300',300)">🎮 Wasa Game - Samu ₦300</button>
+    <p class="small" id="taskMsg"></p>
+  </div>
+
+  <div id="withdrawSection" class="card hidden">
+    <h2>Withdrawal</h2>
+    <p class="small">Minimum Withdrawal: ₦5,000</p>
+    <input id="wBank" placeholder="Bank - Misali Opay">
+    <input id="wAcc" placeholder="Account Number">
+    <input id="wName" placeholder="Account Name">
+    <input id="wAmount" type="number" placeholder="Nawa kake so ka cire?">
+    <button class="green" onclick="requestWithdraw()">Nemi Withdrawal</button>
+    <p id="wMsg" class="small"></p>
+  </div>
+
+  <div class="card">
+    <h2>Ka gayyato Abokanka</h2>
+    <p class="small">Copy wannan link din ka tura musu:</p>
+    <input id="shareLink" readonly value="https://armyone000-sudo.github.io/Task-_-and-_-game-_-luckky/">
+    <button onclick="copyLink()">Copy Link</button>
+  </div>
+</div>
+
+<script>
+let ADMIN_PASS = "King3226";
+let currentUser = null;
+function getUsers(){ return JSON.parse(localStorage.getItem('tl_users')||'{}'); }
+function saveUsers(u){ localStorage.setItem('tl_users', JSON.stringify(u)); }
+function getWithdraws(){ return JSON.parse(localStorage.getItem('tl_withdraws')||'[]'); }
+function saveWithdraws(w){ localStorage.setItem('tl_withdraws', JSON.stringify(w)); }
+function register(){
+  let name=document.getElementById('regName').value.trim();
+  let phone=document.getElementById('regPhone').value.trim();
+  let pass=document.getElementById('regPass').value.trim();
+  let ref=document.getElementById('refCode').value.trim();
+  if(!name||!phone||!pass){alert('Ka cike suna, phone da password');return;}
+  let users=getUsers();
+  if(users[phone]){
+    if(users[phone].pass!==pass){alert('Password bai dace ba');return;}
+    currentUser=phone;
+  } else {
+    let myRef = 'LK' + Math.floor(1000+Math.random()*9000) + 'TL';
+    users[phone]={name,phone,pass,ref:myRef,invitedBy:ref||'',balance:0,status:'not_paid',txn:'',created:new Date().toLocaleString()};
+    // referral bonus for inviter if code matches
+    if(ref){
+      for(let k in users){ if(users[k].ref===ref){ users[k].balance+=200; } }
+    }
+    saveUsers(users);
+    currentUser=phone;
+  }
+  localStorage.setItem('tl_current', currentUser);
+  showUser();
+}
+function showUser(){
+  document.getElementById('authPage').classList.add('hidden');
+  document.getElementById('adminLogin').classList.add('hidden');
+  document.getElementById('adminPage').classList.add('hidden');
+  document.getElementById('userPage').classList.remove('hidden');
+  let users=getUsers(); let u=users[currentUser];
+  document.getElementById('uName').innerText=u.name;
+  document.getElementById('uPhone').innerText=u.phone;
+  document.getElementById('uBalance').innerText='₦'+u.balance.toLocaleString();
+  document.getElementById('myRef').innerText=u.ref;
+  let st=document.getElementById('uStatus');
+  if(u.status==='active'){ st.innerText='ACTIVATED ✅'; st.className='badge active';
+    document.getElementById('paySection').classList.add('hidden');
+    document.getElementById('waitSection').classList.add('hidden');
+    document.getElementById('taskSection').classList.remove('hidden');
+    document.getElementById('withdrawSection').classList.remove('hidden');
+  } else if(u.status==='pending'){ st.innerText='PENDING - ANA JIRA'; st.className='badge pending';
+    document.getElementById('paySection').classList.add('hidden');
+    document.getElementById('waitSection').classList.remove('hidden');
+    document.getElementById('waitTxn').innerText=u.txn;
+    document.getElementById('taskSection').classList.add('hidden');
+    document.getElementById('withdrawSection').classList.add('hidden');
+  } else { st.innerText='NOT ACTIVATED'; st.className='badge locked';
+    document.getElementById('paySection').classList.remove('hidden');
+    document.getElementById('waitSection').classList.add('hidden');
+    document.getElementById('taskSection').classList.add('hidden');
+    document.getElementById('withdrawSection').classList.add('hidden');
+  }
+}
+function submitPayment(){
+  let txn=document.getElementById('txnId').value.trim();
+  if(!txn){alert('Saka Transaction ID');return;}
+  let users=getUsers(); users[currentUser].status='pending'; users[currentUser].txn=txn; saveUsers(users);
+  document.getElementById('payMsg').innerText='An karba! Ana jiran Admin ya tabbatar a Opay dinsa.';
+  showUser();
+}
+function doTask(label, amt){
+  let users=getUsers(); users[currentUser].balance+=amt; saveUsers(users); showUser();
+  document.getElementById('taskMsg').innerText='Ka samu ₦'+amt+' - '+label;
+}
+function requestWithdraw(){
+  let bank=document.getElementById('wBank').value.trim();
+  let acc=document.getElementById('wAcc').value.trim();
+  let name=document.getElementById('wName').value.trim();
+  let amt=parseInt(document.getElementById('wAmount').value);
+  let users=getUsers(); let u=users[currentUser];
+  if(!bank||!acc||!name||!amt){alert('Ka cike komai');return;}
+  if(amt<5000){alert('Minimum ₦5,000');return;}
+  if(amt>u.balance){alert('Balance bai isa ba');return;}
+  u.balance-=amt; saveUsers(users);
+  let ws=getWithdraws(); ws.push({phone:currentUser,name:u.name,bank,acc,accName:name,amount:amt,date:new Date().toLocaleString(),status:'pending'}); saveWithdraws(ws);
+  document.getElementById('wMsg').innerText='An karbi Withdrawal din. Admin zai biya ka.';
+  showUser();
+}
+function copyLink(){
+  let el=document.getElementById('shareLink'); el.select(); document.execCommand('copy');
+  alert('An kwafa link din! Yanzu ka tura wa abokanka a WhatsApp.');
+}
+function showAdminLogin(){
+  document.getElementById('authPage').classList.add('hidden');
+  document.getElementById('adminLogin').classList.remove('hidden');
+}
+function backHome(){
+  document.getElementById('adminLogin').classList.add('hidden');
+  document.getElementById('authPage').classList.remove('hidden');
+}
+function adminLogin(){
+  let p=document.getElementById('adminPass').value;
+  if(p!==ADMIN_PASS){alert('Password ba daidai bane');return;}
+  document.getElementById('adminLogin').classList.add('hidden');
+  document.getElementById('adminPage').classList.remove('hidden');
+  renderAdmin();
+}
+function renderAdmin(){
+  let users=getUsers(); let ws=getWithdraws();
+  let html=''; let approved=0, pending=0;
+  for(let k in users){ let u=users[k]; if(u.status==='active') approved++; if(u.status==='pending') pending++;
+    html+=`<div class="admin-item"><b>${u.name}</b> - ${u.phone}<br>Ref: ${u.ref} | Invited by: ${u.invitedBy||'-'}<br>Balance: ₦${u.balance} | Status: ${u.status} | Txn: ${u.txn||'-'}<br><div class="flex"><button class="green" onclick="approveUser('${k}')">Approve ₦3,000</button><button class="red" onclick="rejectUser('${k}')">Reject</button></div></div>`;
+  }
+  document.getElementById('adminList').innerHTML=html||'Babu kowa tukuna';
+  document.getElementById('totalUsers').innerText=Object.keys(users).length;
+  document.getElementById('totalApproved').innerText=approved;
+  document.getElementById('totalPending').innerText=pending;
+  let wh='';
+  ws.forEach((w,i)=>{ wh+=`<div class="admin-item"><b>${w.name}</b> - ${w.phone}<br>Bank: ${w.bank} | ${w.acc} | ${w.accName}<br>Amount: ₦${w.amount} | ${w.date} | ${w.status}<br><button class="green" onclick="markPaid(${i})">An Biya</button></div>`; });
+  document.getElementById('adminWithdraw').innerHTML=wh||'Babu Withdrawal tukuna';
+}
+function approveUser(phone){
+  let users=getUsers(); users[phone].status='active'; users[phone].balance+=1000; saveUsers(users); alert('An kunna account din '+users[phone].name+' - Ya samu ₦1,000 Bonus'); renderAdmin();
+}
+function rejectUser(phone){
+  let users=getUsers(); users[phone].status='not_paid'; users[phone].txn=''; saveUsers(users); renderAdmin();
+}
+function markPaid(i){
+  let ws=getWithdraws(); ws[i].status='paid'; saveWithdraws(ws); renderAdmin();
+}
+function logout(){
+  localStorage.removeItem('tl_current'); currentUser=null;
+  document.getElementById('userPage').classList.add('hidden');
+  document.getElementById('adminPage').classList.add('hidden');
+  document.getElementById('adminLogin').classList.add('hidden');
+  document.getElementById('authPage').classList.remove('hidden');
+}
+// auto login
+let saved=localStorage.getItem('tl_current');
+if(saved){ currentUser=saved; showUser(); }
+</script>
+</body>
+</html>
